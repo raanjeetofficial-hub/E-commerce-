@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Parcel — everyday goods</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #fff;
+      --text: #14213d;
+      --muted: #667085;
+      --line: #dde2e8;
+      --brand: #0b5fff;
+      --brand-ink: #fff;
+      --danger: #c62828;
+      --ok: #1b7f4b
+    }
+
+    @media(prefers-color-scheme:dark) {
+      :root {
+        --bg: #0e131c;
+        --card: #161d29;
+        --text: #e8edf5;
+        --muted: #93a0b4;
+        --line: #263041;
+        --brand: #5b95ff;
+        --brand-ink: #08111f;
+        --danger: #ff7b72;
+        --ok: #5fd394
+      }
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 400 15px/1.5 Inter, system-ui, sans-serif
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: "Bricolage Grotesque", Inter, sans-serif;
+      margin: 0 0 .5em;
+      letter-spacing: -.01em
+    }
+
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 5
+    }
+
+    .bar {
+      max-width: 1100px;
+      margin: auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap
+    }
+
+    .logo {
+      font: 700 22px "Bricolage Grotesque", sans-serif;
+      color: var(--text);
+      text-decoration: none;
+      margin-right: auto
+    }
+
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      margin-left: 16px;
+      font-weight: 500;
+      cursor: pointer
+    }
+
+    nav a:hover {
+      color: var(--brand)
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 24px 20px 60px
+    }
+
+    .btn,
+    button.sm {
+      background: var(--brand);
+      color: var(--brand-ink);
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font: 600 14px Inter, sans-serif;
+      cursor: pointer
+    }
+
+    .btn.ghost,
+    button.sm {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--line)
+    }
+
+    button.sm {
+      padding: 5px 10px;
+      font-size: 13px
+    }
+
+    .danger {
+      color: var(--danger) !important
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px
+    }
+
+    button:disabled {
+      opacity: .5;
+      cursor: not-allowed
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text);
+      font: inherit
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      margin: 12px 0 4px
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px
+    }
+
+    .filters input {
+      flex: 2
+    }
+
+    .filters select {
+      flex: 1
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 18px
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column
+    }
+
+    .card .body {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1
+    }
+
+    .img {
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, var(--brand), #1b2a4e);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font: 700 54px "Bricolage Grotesque";
+      background-size: cover;
+      background-position: center
+    }
+
+    .img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block
+    }
+
+    .thumb {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 6px;
+      background: var(--bg)
+    }
+
+    .price {
+      font-weight: 600
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px
+    }
+
+    .low {
+      color: var(--danger);
+      font-size: 13px
+    }
+
+    .box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 440px
+    }
+
+    .wide {
+      max-width: none
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .detail {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px
+    }
+
+    @media(max-width:700px) {
+      .detail {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px
+    }
+
+    .tab {
+      background: none;
+      border: 0;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font: 500 14px Inter;
+      color: var(--muted);
+      cursor: pointer;
+      text-transform: capitalize
+    }
+
+    .tab.on {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--line)
+    }
+
+    .tablewrap {
+      overflow-x: auto;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      white-space: nowrap
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 13px
+    }
+
+    td select {
+      padding: 4px 8px;
+      width: auto
+    }
+
+    dialog {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card);
+      color: var(--text);
+      width: min(480px, 92vw);
+      padding: 20px
+    }
+
+    dialog::backdrop {
+      background: rgba(0, 0, 0, .5)
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--text);
+      color: var(--bg);
+      padding: 10px 18px;
+      border-radius: 8px;
+      opacity: 0;
+      transition: opacity .2s;
+      pointer-events: none
+    }
+
+    #toast.show {
+      opacity: 1
+    }
+
+    .badge {
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      font-size: 12px
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="bar"><a class="logo" href="#/">Ranjit's STORE</a>
+      <nav id="nav"></nav>
+    </div>
+  </header>
+  <main id="app"></main>
+  <dialog id="dlg"></dialog>
+  <div id="toast" role="status"></div>
+  <script>
+    const $ = s => document.querySelector(s), app = $("#app");
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const money = n => "$" + Number(n).toFixed(2);
+    let token = localStorage.token || null, me = null, cart = JSON.parse(localStorage.cart || "[]"), adminTab = "products", products = [];
+
+    function toast(m) { const t = $("#toast"); t.textContent = m; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 2500) }
+    async function api(path, opts = {}) {
+      const h = { ...(opts.headers || {}) }; let body = opts.body;
+      if (token) h.Authorization = "Bearer " + token;
+      if (body && !(body instanceof URLSearchParams) && !(body instanceof FormData)) { h["Content-Type"] = "application/json"; body = JSON.stringify(body) }
+      const r = await fetch("/api" + path, { ...opts, headers: h, body });
+      if (r.status === 204) return null;
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        if (r.status === 401 && token) { logout(); location.hash = "#/login" }
+        const det = d.detail; throw new Error(typeof det === "string" ? det : Array.isArray(det) ? det.map(x => x.msg).join(", ") : "Request failed");
+      }
+      return d;
+    }
+    function saveCart() { localStorage.cart = JSON.stringify(cart); nav() }
+    function logout() { token = null; me = null; delete localStorage.token; nav() }
+    function nav() {
+      const n = cart.reduce((a, i) => a + i.qty, 0);
+      $("#nav").innerHTML = `<a href="#/">Shop</a><a href="#/cart">Cart (${n})</a>` +
+        (me ? `${me.role === "admin" ? '<a href="#/admin">Admin</a>' : ""}<a href="#/orders">My orders</a><a onclick="logout();location.hash=\'#/\'">Log out</a>`
+          : `<a href="#/login">Log in</a><a href="#/register">Sign up</a>`);
+    }
+    const view = h => app.innerHTML = h;
+    const thumb = p => `<div class="img">${p.image_url ? `<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy" onerror="this.parentNode.textContent=this.alt[0]">` : esc(p.name[0])}</div>`;
+
+    /* ---------- shop ---------- */
+    async function shop() {
+      products = await api("/products");
+      const cats = [...new Set(products.map(p => p.category))].sort();
+      view(`<h1>Everyday goods</h1><div class="filters"><input id="q" placeholder="Search products" aria-label="Search products">
+    <select id="cat" aria-label="Category"><option value="">All categories</option>${cats.map(c => `<option>${esc(c)}</option>`).join("")}</select></div><div class="grid" id="grid"></div>`);
+      const draw = () => {
+        const q = $("#q").value.toLowerCase(), c = $("#cat").value;
+        const list = products.filter(p => p.name.toLowerCase().includes(q) && (!c || p.category === c));
+        $("#grid").innerHTML = list.map(p => `<div class="card"><a href="#/product/${p.id}">${thumb(p)}</a><div class="body">
+      <span class="muted">${esc(p.category)}</span><a href="#/product/${p.id}" style="color:inherit;text-decoration:none"><strong>${esc(p.name)}</strong></a>
+      <span class="price">${money(p.price)}</span>${p.stock <= 5 && p.stock > 0 ? `<span class="low">Only ${p.stock} left</span>` : ""}
+      <button class="btn" style="margin-top:auto" ${p.stock ? "" : "disabled"} onclick="addToCart(${p.id})">${p.stock ? "Add to cart" : "Sold out"}</button></div></div>`).join("") || "<p>No products match your search.</p>";
+      };
+      $("#q").oninput = draw; $("#cat").onchange = draw; draw();
+    }
+    async function product(id) {
+      const p = await api("/products/" + id);
+      view(`<a href="#/">← All products</a><div class="detail" style="margin-top:14px">${thumb(p)}<div><span class="muted">${esc(p.category)}</span><h1>${esc(p.name)}</h1>
+    <p class="price" style="font-size:22px">${money(p.price)}</p><p>${esc(p.description)}</p><p class="muted">${p.stock ? p.stock + " in stock" : "Sold out"}</p>
+    <button class="btn" ${p.stock ? "" : "disabled"} onclick="addToCart(${p.id})">Add to cart</button></div></div>`);
+      window._p = p;
+    }
+    async function addToCart(id) {
+      let p = products.find(x => x.id === id) || window._p; if (!p || p.id !== id) p = await api("/products/" + id);
+      const it = cart.find(i => i.id === id);
+      if (it) { if (it.qty >= p.stock) return toast("No more stock available"); it.qty++ }
+      else cart.push({ id, name: p.name, price: p.price, stock: p.stock, qty: 1 });
+      saveCart(); toast("Added to cart");
+    }
+
+    /* ---------- cart & checkout ---------- */
+    function cartView() {
+      if (!cart.length) return view(`<h1>Your cart</h1><p>Your cart is empty. <a href="#/">Browse products</a></p>`);
+      const total = cart.reduce((a, i) => a + i.price * i.qty, 0);
+      view(`<h1>Your cart</h1><div class="box wide">${cart.map((i, k) => `<div class="row"><div><strong>${esc(i.name)}</strong><br><span class="muted">${money(i.price)} each</span></div>
+    <div style="display:flex;gap:10px;align-items:center"><input type="number" min="1" max="${i.stock}" value="${i.qty}" style="width:70px" aria-label="Quantity" onchange="setQty(${k},this.value)">
+    <strong style="width:80px;text-align:right">${money(i.price * i.qty)}</strong><button class="sm danger" onclick="cart.splice(${k},1);saveCart();cartView()">Remove</button></div></div>`).join("")}
+    <p style="text-align:right;font-size:18px"><strong>Total: ${money(total)}</strong></p>
+    <label for="addr">Shipping address</label><textarea id="addr" rows="3" placeholder="Street, city, postal code"></textarea>
+    <p><button class="btn" onclick="checkout()">${me ? "Place order" : "Log in to place order"}</button></p>
+    <p class="muted">Payments are simulated in this demo — orders are saved as "pending".</p></div>`);
+    }
+    function setQty(k, v) { cart[k].qty = Math.max(1, Math.min(cart[k].stock, parseInt(v) || 1)); saveCart(); cartView() }
+    async function checkout() {
+      if (!me) { location.hash = "#/login"; return }
+      try {
+        await api("/orders", { method: "POST", body: { address: $("#addr").value, items: cart.map(i => ({ product_id: i.id, quantity: i.qty })) } });
+        cart = []; saveCart(); toast("Order placed"); location.hash = "#/orders";
+      } catch (e) { toast(e.message) }
+    }
+    async function orders() {
+      const os = await api("/orders/mine");
+      view(`<h1>My orders</h1>${os.map(o => `<div class="box wide" style="margin-bottom:14px"><div class="row" style="padding-top:0"><strong>Order #${o.id}</strong><span class="badge">${o.status}</span></div>
+    ${o.items.map(i => `<div class="row"><span>${esc(i.name)} × ${i.quantity}</span><span>${money(i.price * i.quantity)}</span></div>`).join("")}
+    <p style="text-align:right"><strong>${money(o.total)}</strong><br><span class="muted">${new Date(o.created_at + "Z").toLocaleString()}</span></p></div>`).join("") || "<p>You haven't ordered anything yet.</p>"}`);
+    }
+
+    /* ---------- auth ---------- */
+    function authView(reg) {
+      view(`<div class="box"><h1>${reg ? "Create account" : "Log in"}</h1><form onsubmit="doAuth(event,${reg})">
+    ${reg ? '<label>Full name</label><input name="full_name" required>' : ""}<label>Email</label><input name="email" type="email" required>
+    <label>Password</label><input name="password" type="password" minlength="6" required><p><button class="btn">${reg ? "Sign up" : "Log in"}</button></p></form></div>`);
+    }
+    async function doAuth(e, reg) {
+      e.preventDefault(); const f = Object.fromEntries(new FormData(e.target));
+      try {
+        if (reg) await api("/auth/register", { method: "POST", body: f });
+        const t = await api("/auth/login", { method: "POST", body: new URLSearchParams({ username: f.email, password: f.password }) });
+        token = t.access_token; localStorage.token = token; me = await api("/auth/me"); nav();
+        location.hash = me.role === "admin" ? "#/admin" : "#/";
+      } catch (err) { toast(err.message) }
+    }
+
+    /* ---------- admin ---------- */
+    async function adminView() {
+      if (!me || me.role !== "admin") return view(`<div class="box">This page is for admins only.</div>`);
+      let h = `<h1>Admin</h1><div class="tabs">${["products", "orders", "users"].map(t => `<button class="tab ${t === adminTab ? "on" : ""}" onclick="adminTab='${t}';route()">${t}</button>`).join("")}</div>`;
+      if (adminTab === "products") {
+        const ps = window._ps = await api("/admin/products");
+        h += `<p><button class="btn" onclick="editProduct()">New product</button></p><div class="tablewrap"><table><tr><th>Image<th>Name<th>Category<th>Price<th>Stock<th>Visible<th></tr>
+    ${ps.map(p => `<tr><td>${p.image_url ? `<img class=thumb src="${esc(p.image_url)}" alt="">` : '<div class=thumb></div>'}<td>${esc(p.name)}<td>${esc(p.category)}<td>${money(p.price)}<td>${p.stock}<td>${p.is_active ? "Yes" : "Hidden"}
+    <td><button class="sm" onclick="editProduct(${p.id})">Edit</button> <button class="sm danger" onclick="delItem('products',${p.id})">Delete</button></tr>`).join("")}</table></div>`;
+      } else if (adminTab === "orders") {
+        const os = await api("/admin/orders");
+        h += `<div class="tablewrap"><table><tr><th>ID<th>Customer<th>Items<th>Total<th>Ship to<th>Status<th></tr>${os.map(o => `<tr><td>${o.id}<td>${esc(o.user_email || "deleted user")}
+    <td>${o.items.map(i => esc(i.name) + " ×" + i.quantity).join("<br>")}<td>${money(o.total)}<td style="white-space:normal">${esc(o.address)}
+    <td><select onchange="setStatus(${o.id},this.value)">${["pending", "paid", "shipped", "delivered", "cancelled"].map(s => `<option ${s === o.status ? "selected" : ""}>${s}</option>`).join("")}</select>
+    <td><button class="sm danger" onclick="delItem('orders',${o.id})">Delete</button></tr>`).join("")}</table></div>`;
+      } else {
+        const us = await api("/admin/users");
+        h += `<div class="tablewrap"><table><tr><th>ID<th>Name<th>Email<th>Role<th></tr>${us.map(u => `<tr><td>${u.id}<td>${esc(u.full_name)}<td>${esc(u.email)}
+    <td><select ${u.id === me.id ? "disabled" : ""} onchange="setRole(${u.id},this.value)">${["customer", "admin"].map(r => `<option ${r === u.role ? "selected" : ""}>${r}</option>`).join("")}</select>
+    <td><button class="sm danger" ${u.id === me.id ? "disabled" : ""} onclick="delItem('users',${u.id})">Delete</button></tr>`).join("")}</table></div>`;
+      }
+      view(h);
+    }
+    function editProduct(id) {
+      const p = (window._ps || []).find(x => x.id === id) || { name: "", description: "", price: "", stock: 0, image_url: "", category: "General", is_active: true };
+      $("#dlg").innerHTML = `<h2>${id ? "Edit product" : "New product"}</h2><form onsubmit="saveProduct(event,${id || 0})">
+   <label>Name</label><input name="name" required value="${esc(p.name)}"><label>Description</label><textarea name="description" rows="3">${esc(p.description)}</textarea>
+   <div style="display:flex;gap:10px"><div style="flex:1"><label>Price</label><input name="price" type="number" step="0.01" min="0.01" required value="${p.price}"></div>
+   <div style="flex:1"><label>Stock</label><input name="stock" type="number" min="0" required value="${p.stock}"></div></div>
+   <label>Category</label><input name="category" required value="${esc(p.category)}"><label>Product image</label><div style="display:flex;gap:12px;align-items:center"><img id="prev" class="thumb" style="width:64px;height:64px;${p.image_url ? "" : "visibility:hidden"}" src="${esc(p.image_url)}" alt="">
+   <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onchange="uploadImg(this)"></div>
+   <label>Or paste an image URL</label><input name="image_url" id="imgurl" value="${esc(p.image_url)}" oninput="$('#prev').src=this.value;$('#prev').style.visibility=this.value?'visible':'hidden'">
+   <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" name="is_active" style="width:auto" ${p.is_active ? "checked" : ""}> Visible in shop</label>
+   <p style="display:flex;gap:10px;justify-content:flex-end"><button type="button" class="btn ghost" onclick="$('#dlg').close()">Cancel</button><button class="btn">Save product</button></p></form>`;
+      $("#dlg").showModal();
+    }
+    async function saveProduct(e, id) {
+      e.preventDefault(); const f = new FormData(e.target);
+      const body = {
+        name: f.get("name"), description: f.get("description"), price: parseFloat(f.get("price")), stock: parseInt(f.get("stock")),
+        category: f.get("category"), image_url: f.get("image_url"), is_active: f.get("is_active") === "on"
+      };
+      try { await api(id ? "/admin/products/" + id : "/admin/products", { method: id ? "PUT" : "POST", body }); $("#dlg").close(); toast("Saved"); adminView() } catch (err) { toast(err.message) }
+    }
+    async function uploadImg(inp) {
+      const file = inp.files[0]; if (!file) return;
+      if (file.size > 5 * 1024 * 1024) { inp.value = ""; return toast("Image must be under 5 MB") }
+      const fd = new FormData(); fd.append("file", file);
+      try {
+        const d = await api("/admin/upload", { method: "POST", body: fd });
+        $("#imgurl").value = d.url; $("#prev").src = d.url; $("#prev").style.visibility = "visible"; toast("Image uploaded");
+      } catch (e) { toast(e.message) }
+    }
+    async function delItem(kind, id) {
+      if (!confirm("Delete this item permanently?")) return;
+      try { await api(`/admin/${kind}/${id}`, { method: "DELETE" }); toast("Deleted"); adminView() } catch (e) { toast(e.message) }
+    }
+    async function setStatus(id, status) { try { await api(`/admin/orders/${id}/status`, { method: "PUT", body: { status } }); toast("Status updated") } catch (e) { toast(e.message) } }
+    async function setRole(id, role) { try { await api(`/admin/users/${id}/role`, { method: "PUT", body: { role } }); toast("Role updated") } catch (e) { toast(e.message); adminView() } }
+
+    /* ---------- router ---------- */
+    async function route() {
+      const [, page, arg] = location.hash.slice(1).split("/");
+      try {
+        if (!page) await shop();
+        else if (page === "product") await product(arg);
+        else if (page === "cart") cartView();
+        else if (page === "login") authView(false);
+        else if (page === "register") authView(true);
+        else if (page === "orders") me ? await orders() : (location.hash = "#/login");
+        else if (page === "admin") await adminView();
+        else view("<p>Page not found.</p>");
+      } catch (e) { view(`<div class="box">${esc(e.message)}</div>`) }
+    }
+    window.addEventListener("hashchange", route);
+    (async () => { if (token) { try { me = await api("/auth/me") } catch { } } nav(); route() })();
+  </script>
+</body>
+
+</html>
